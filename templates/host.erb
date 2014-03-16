@@ -1,0 +1,10 @@
+define host {
+    use                     generic-host
+    host_name               <%= host.hostname %>
+    alias                   <%= host.hostname %>
+    address                 <%= host.backend_address.address %>
+    notes_url               <%= collins_host %>/asset/<%= host.tag %>
+    _nodeclass              <%= host.nodeclass %>
+
+    contact_groups            operations
+}
