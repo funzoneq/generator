@@ -1,0 +1,5 @@
+define hostgroup {
+  hostgroup_name <%= extras[:nodeclass] %>
+  alias          <%= extras[:nodeclass] %>
+  members        <%= host.join(",") %>
+}

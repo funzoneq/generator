@@ -1,11 +1,12 @@
-class IcingaHost
+class GenerateFromTemplate
   include ERB::Util
-  attr_accessor :host, :template, :collins_host
+  attr_accessor :host, :template, :collins_host, :extras
 
-  def initialize(host, template, collins_host)
+  def initialize(host, template, collins_host, extras = {})
     @template = File.open(template, "rb").read
     @host = host
     @collins_host = collins_host
+    @extras = extras
   end
 
   def render()
