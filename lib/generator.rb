@@ -22,22 +22,23 @@ class Generator
   end
   
   def generate_icinga_configs
-    hosts = self.find :status => "Allocated", :hostname => "*"
+    # Find all nodes in icinga
+    hosts = self.find :status => "Allocated", :hostname => "*", :query => "TYPE = SERVER_NODE OR TYPE = SWITCH OR TYPE = ROUTER OR TYPE = POWER_STRIP"
+    
+    # Initialize hashes
     nodeclass = {}
-    nodeclass['all'] = []
+    nodeclass['TYPE:all'] = []
     
     hosts.each do |host|
-      nodeclass[host.nodeclass] = [] unless nodeclass[host.nodeclass].kind_of?(Array)
-      nodeclass[host.nodeclass] << host.hostname
-      nodeclass['all'] << host.hostname
+      nodeclass["NODECLASS:#{host.nodeclass}"] = [] unless nodeclass.has_key?("NODECLASS:#{host.nodeclass}")
+      nodeclass["NODECLASS:#{host.nodeclass}"] << host.hostname
       
-      h = GenerateFromTemplate.new(host, "templates/host.erb", collins_host)
-      h.save("#{@basedir}/hosts/#{host.hostname}.cfg")
+      nodeclass["TYPE:#{host.type}"] = [] unless nodeclass.has_key?("TYPE:#{host.type}")
+      nodeclass["TYPE:#{host.type}"] << host.hostname
+      nodeclass['TYPE:all'] << host.hostname
     end
     
-    nodeclass.each do |nc,host|
-      h = GenerateFromTemplate.new(host, "templates/hostgroup.erb", collins_host, { :nodeclass => nc })
-      h.save("#{@basedir}/hostgroups/#{nc}.cfg")
-    end
+    GenerateFromTemplate.new(hosts, "templates/host.erb", collins_host, "#{@basedir}/hosts.cfg")
+    GenerateFromTemplate.new(nodeclass, "templates/hostgroup.erb", collins_host, "#{@basedir}/hostgroups.cfg")
   end
 end

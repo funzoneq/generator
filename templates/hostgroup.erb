@@ -1,5 +1,9 @@
+<% items.each do |nc,hosts| %>
+
 define hostgroup {
-  hostgroup_name <%= extras[:nodeclass] %>
-  alias          <%= extras[:nodeclass] %>
-  members        <%= host.join(",") %>
+  hostgroup_name <%= nc %>
+  alias          <%= nc %>
+  members        <%= hosts.join(",") %>
 }
+
+<% end %>

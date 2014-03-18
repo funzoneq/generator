@@ -1,10 +1,14 @@
+<% items.each do |host| %>
+
 define host {
     use                     generic-host
     host_name               <%= host.hostname %>
     alias                   <%= host.hostname %>
-    address                 <%= host.backend_address.address %>
+    address                 <%= primary_address(host).address %>
     notes_url               <%= collins_host %>/asset/<%= host.tag %>
     _nodeclass              <%= host.nodeclass %>
 
     contact_groups            operations
 }
+
+<% end %>
