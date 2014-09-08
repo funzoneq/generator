@@ -7,8 +7,7 @@ require 'generator/fromtemplate.rb'
 class Generator
   def initialize
     @basedir = File.expand_path '~/Documents/blendle_config/icinga'
-    config = YAML.load_file File.expand_path "~/.collins.blendle.yaml"
-    @collins = Collins::Authenticator.setup_client config, false
+    @collins = Collins::Authenticator.setup_client
   end
   
   def find options = {}

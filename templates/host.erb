@@ -1,3 +1,20 @@
+define host{
+		name                            generic-host
+		active_checks_enabled           1
+		flap_detection_enabled          1
+		process_perf_data               0
+		retain_status_information       1
+		retain_nonstatus_information    1
+		register                        0
+		check_command                   check-host-alive
+		max_check_attempts              3
+		check_period                    24x7
+		contact_groups                  backend_contactgroup
+		notification_interval           10
+		notification_period             24x7
+		notification_options            d,u,r,f
+}
+
 <% items.each do |host| %>
 
 define host {
@@ -8,7 +25,7 @@ define host {
     notes_url               <%= collins_host %>/asset/<%= host.tag %>
     _nodeclass              <%= host.nodeclass %>
 
-    contact_groups            operations
+    contact_groups          backend_contactgroup
 }
 
 <% end %>
